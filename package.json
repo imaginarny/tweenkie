@@ -1,0 +1,76 @@
+{
+  "name": "tweenkie",
+  "version": "1.0.0",
+  "description": "Bytes-sized tweening function/library",
+  "main": "dist/tween.mjs",
+  "exports": {
+    ".": {
+      "node": "./dist/server/tween.cjs",
+      "import": "./dist/tween.mjs",
+      "require": "./dist/tween.cjs",
+      "types": "./types/tween.d.mts"
+    },
+    "./simple": {
+      "node": "./dist/server/simple/tween.cjs",
+      "import": "./dist/simple/tween.mjs",
+      "require": "./dist/simple/tween.cjs",
+      "types": "./types/simple/tween.d.mts"
+    },
+    "./server": {
+      "import": "./dist/server/tween.mjs",
+      "require": "./dist/server/tween.cjs",
+      "types": "./types/tween.d.mts"
+    },
+    "./server/simple": {
+      "import": "./dist/server/simple/tween.mjs",
+      "require": "./dist/server/simple/tween.cjs",
+      "types": "./types/simple/tween.d.mts"
+    },
+    "./umd": {
+      "default": "./dist/umd/tween.js",
+      "types": "./types/tween.d.mts"
+    },
+    "./umd/simple": {
+      "default": "./dist/umd/simple/tween.js",
+      "types": "./types/simple/tween.d.mts"
+    }
+  },
+  "type": "module",
+  "types": "types/types.d.mts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "rollup -c rollup.config.js"
+  },
+  "keywords": [
+    "tween",
+    "tweening",
+    "transition",
+    "animation",
+    "animate",
+    "ease",
+    "easing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imaginarny/tweenkie.git"
+  },
+  "author": {
+    "name": "Peter Genčur",
+    "url": "https://petergencur.com/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.18.0"
+  },
+  "bugs": {
+    "url": "https://github.com/imaginarny/tweenkie/issues"
+  },
+  "homepage": "https://github.com/imaginarny/tweenkie#readme",
+  "jsdelivr": "dist/umd/tween.min.js",
+  "unpkg": "dist/umd/tween.min.js"
+}

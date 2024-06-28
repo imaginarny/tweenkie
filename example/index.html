@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tweenkie - tween function example</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍰</text></svg>">
+	<link rel="prefetch" href="https://gist.github.com/assets/20380121/d97e55d4-0d54-4637-bd39-be3b8d227ecd" />
+
+	<style>
+		* {
+			box-sizing: border-box;
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		body {
+			font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+			font-size: 1.25rem;
+			line-height: 1.5;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 1rem;
+			margin: 0;
+			padding: 1.725rem;
+			min-height: 100svh;
+			color: #fff;
+			background-image: linear-gradient(140deg, rgb(165, 142, 251), rgb(233, 191, 248));
+			overflow-x: hidden;
+		}
+
+    body > * {
+      margin-top: auto;
+    }
+
+		.tweenkie {
+			--bg: rgba(0,0,0,.75);
+			--focus-shadow: 0 0 0 0;
+			position: relative;
+			background: var(--bg);
+			border-radius: .625rem;
+			box-shadow: var(--focus-shadow), 0 2.8px 2.2px rgba(0,0,0,.034),0 6.7px 5.3px rgba(0,0,0,.048),0 12.5px 10px rgba(0,0,0,.06),0 22.3px 17.9px rgba(0,0,0,.072),0 41.8px 33.4px rgba(0,0,0,.086),0 100px 80px rgba(0,0,0,.12);
+			will-change: width, height;
+		}
+
+		.tweenkie:has(button:focus-visible) {
+			--focus-shadow: inset 0 0 0 2px var(--bg), inset 0 0 0 3px rgba(255,255,255,.25);
+		}
+
+		.wrapper-container {
+			position: relative;
+			width: inherit;
+			height: inherit;
+		}
+
+		.tweenkie.is-animating .wrapper-container,
+		.tweenkie:not(.is-active) .wrapper-container {
+			overflow: hidden;
+		}
+
+		.wrapper-content {
+			padding: 2rem;
+		}
+
+		button {
+			all: unset;
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+			width: 100%;
+			font-weight: bold;
+			cursor: pointer;
+			touch-action: manipulation;
+		}
+
+		button > span:last-child {
+			margin-left: auto;
+		}
+
+		.content {
+			display: flex;
+			align-items: center;
+			flex-wrap: wrap;
+			gap: 1.875rem;
+			margin-top: 1rem;
+			padding-top: 1.5rem;
+			box-shadow: 0 -1px 0 0 rgba(255,255,255,.2);
+			transition: opacity .2s .1s;
+		}
+
+		.content > * {
+			max-width: 28ch;
+		}
+
+		.tweenkie:not(.is-active) .content {
+			position: absolute;
+			opacity: 0;
+			pointer-events: none;
+      user-select: none;
+      visibility: hidden;
+			transition-delay: 0s;
+		}
+
+		.tweenkie.is-active .content {
+			opacity: 1;
+		}
+
+		.tweenkie.is-active .expand,
+		.tweenkie:not(.is-active) .collapse {
+			display: none;
+		}
+
+		.expand + span {
+			display: none;
+		}
+
+		.image::before {
+			content: "";
+			background: rgba(0,0,0,.5);
+			position: fixed;
+			inset: 0;
+			cursor: pointer;
+			transition: opacity .25s ease-out;
+		}
+
+		.image:not(:has(.is-active))::before {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.image img {
+			display: block;
+			border-radius: .4rem;
+			cursor: pointer;
+			box-shadow: 0 15px 30px rgba(0,0,0,.2);
+			transform: scale(1);
+			transition: transform .3s cubic-bezier(.15,.91,0,1.08);
+		}
+
+		.content a {
+			color: rgb(185, 142, 255);
+			font-size: 90%;
+			font-weight: bolder;
+		}
+
+    a:focus {
+      outline: none;
+    }
+
+    a:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: .25em;
+      border-radius: 2px;
+    }
+
+		output {
+			--radius-1: .875rem;
+			--radius-2: .625rem;
+			position: absolute;
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+			color: var(--bg);
+			font-family: 'Courier New', Courier, monospace;
+			font-size: .758rem;
+			text-align: center;
+		}
+
+		output::before,
+		output::after {
+			content: "";
+			flex: 1 0 auto;
+			width: 6px;
+			height: 6px;
+			margin-block-start: 4px;
+			border: 1px solid rgba(0,0,0,.2);
+			border-block-end: none;
+		}
+
+		output::before {
+			border-inline-end: none;
+			border-start-start-radius: var(--radius-1) var(--radius-2);
+		}
+
+		output::after {
+			border-inline-start: none;
+			border-start-end-radius: var(--radius-1) var(--radius-2);
+		}
+
+		[name="width"] {
+			bottom: 100%;
+			left: 50%;
+			width: 100%;
+			margin-bottom: .25rem;
+			transform: translate3d(-50%, 0, 0);
+		}
+
+		[name="height"] {
+			top: 50%;
+			left: 100%;
+			height: 100%;
+			margin-left: .25rem;
+			transform: translate3d(0, -50%, 0);
+			writing-mode: vertical-rl;
+		}
+
+		[name="height"]::before {
+			border-start-start-radius: var(--radius-2) var(--radius-1);
+		}
+
+		[name="height"]::after {
+			border-start-end-radius: var(--radius-2) var(--radius-1);
+		}
+
+    .by {
+      display: flex;
+      align-items: center;
+      gap: .25em;
+      font-size: .875rem;
+      font-weight: 600;
+      padding: .25rem .5rem;
+      color: rgba(0,0,0,.5);
+      text-underline-offset: 2px;
+      text-decoration: 2px underline rgba(0,0,0,.2);
+    }
+
+    .by img {
+      border-radius: 9999px;
+      image-rendering: pixelated;
+      box-shadow: 0 3px 10px rgba(0,0,0,.2), 0 4px 4px -2px rgba(0,0,0,.2);
+    }
+	</style>
+</head>
+<body>
+	<main class="tweenkie">
+		<output name="width">252px</output>
+		<output name="height">94px</output>
+
+		<div class="wrapper-container">
+			<div class="wrapper-content">
+				<button>
+					<span>
+						Click to <span class="expand">expand</span><span>/</span><span class="collapse">collapse</span>!
+					</span>
+
+					<span>🍰</span>
+				</button>
+
+				<div class="content">
+					<div class="image">
+						<img src="https://gist.github.com/assets/20380121/6eab7490-51b8-4275-a448-74cf76380f2a" width="180" height="138" alt="Code example">
+					</div>
+
+					<div>
+						Tweenkie is a bytes-sized tweening function/library<br>
+						<a href="https://github.com/imaginarny/tweenkie" target="_blank" rel="noopener">Learn more on GitHub</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+  <a class="by" href="https://go.petergencur.com/x-tweenkie" target="_blank" rel="noopener">Created by <img width="20" height="20" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAJcEhZcwAACxMAAAsTAQCanBgAAABXUExURebTw0snICATLOfTxD0eGUdHxD5AsgAAAEZGwz1AsTwdGf///8qmmj0/sefUxCEULD0eGiETLEZGxEZHxObTxMmlmUsmIEomIMOwuUomHzweGcKvuMqlmurs7VYAAAC/SURBVBjTPY8JjkQhCAVBAYFW/9LbbPc/54Az3cTEWNQjCCZ6mpwsQ1mE1QxENC4lQiQyXWjERZ4E8fngIWGdqTxo39FpVxEwY43+l3ck/7wmypGO7vu993vnZYkyoU+vUOfkl0VIdQLAhDdyolDgBnXtFUGVIJGDeuOrrFVZaoYAMK0IDmYLqfcnYiw0xp8FUH967ybv8e1V6+sgVrYjXh+XqFZKolLKVlq7rJMMrJUjUVjJyhFLZGvLQd//1i9VUAlvWcX6twAAAABJRU5ErkJggg==" alt="Avatar"> @petergencur</a>
+
+	<script>
+		// Tweenkie's tween function
+		const tween = (a,f,cb,d=300,e=t=>1-(1-t)**3)=>{const n=()=>performance.now(),b=n(),i=(v,t)=>v[0]+(v[1]-v[0])*t,s=()=>{const t=Math.min((n()-b)/d,1);f(a[0].map?a.map(v=>i(v,e(t))):i(a,e(t)));t<1?requestAnimationFrame(s):cb&&cb()};s()}
+
+		const main = document.querySelector('.tweenkie')
+		const wrapper = main.querySelector('.wrapper-content')
+		const button = main.querySelector('button')
+		const output = { width: main.querySelector('[name="width"]'), height: main.querySelector('[name="height"]') }
+
+		button.addEventListener('click', () => {
+			if (main.classList.contains('is-animating')) return
+
+			const [startWidth, endWidth, startHeight, endHeight] = getDimensions()
+
+			main.classList.add('is-animating')
+			toggleActive()
+
+			wrapper.style.width = endWidth + 'px'
+			wrapper.style.height = endHeight + 'px'
+
+			// Tweenkie in action
+			tween(
+				// Value pairs
+				[[startWidth, endWidth], [startHeight, endHeight]],
+
+				// Update function
+				([width, height]) => {
+					main.style.width = output.width.value = width.toFixed() + 'px'
+					main.style.height = output.height.value = height.toFixed() + 'px'
+				},
+
+				// Finished callback
+				() => {
+					main.style = wrapper.style = ''
+					main.classList.remove('is-animating')
+				},
+
+				// Duration in ms (default 300)
+				1000,
+
+				// Easing function (default easeOutCubic)
+				easeOutElastic
+			)
+		})
+
+		const getDimensions = () => {
+			const { width: startWidth, height: startHeight } = getComputedStyle(main)
+
+			toggleActive()
+			const { width: endWidth, height: endHeight } = getComputedStyle(main)
+			toggleActive()
+
+			return [
+				startWidth, endWidth,
+				startHeight, endHeight
+			].map(i => Math.ceil(parseFloat(i)))
+		}
+
+		const toggleActive = () => {
+			main.classList.toggle('is-active', !main.classList.contains('is-active'))
+		}
+
+		// easings.net function
+		const easeOutElastic = x => {
+		const c4 = (2 * Math.PI) / 3
+
+		return x === 0
+			? 0
+			: x === 1
+			? 1
+			: Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1
+		}
+
+		// Not important
+		const image = main.querySelector('img')
+		image.parentElement.addEventListener('click', () => {
+			const isActive = image.classList.contains('is-active')
+			const { width, height, top, left } = image.getBoundingClientRect()
+      const maxWidth = 1000, maxHeight = 800
+			const offset = 40
+			const scale = Math.min(
+        (Math.min(window.innerWidth - offset, maxWidth)) / width,
+        (Math.min(window.innerHeight - offset, maxHeight)) / height
+      )
+			const translateX = ((window.innerWidth / 2) - (left + width / 2)) / scale
+			const translateY = ((window.innerHeight / 2) - (top + height / 2)) / scale
+			image.classList.toggle('is-active', !isActive)
+			image.style.transform = !isActive
+				? `scale(${scale}) translate3d(${translateX}px, ${translateY}px, 0)`
+				: ''
+		})
+	</script>
+</body>
+</html>
