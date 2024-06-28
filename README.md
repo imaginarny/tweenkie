@@ -2,7 +2,7 @@
 
 The most compact yet complete function to tween between two or more value pairs in under 300 bytes.
 
-![Tweenkie code example](https://gist.github.com/assets/20380121/7e0d447b-5b72-4551-b2da-12bf6e51c8e1)
+![Tweenkie code example](https://github.com/imaginarny/tweenkie/assets/20380121/9017d825-aa70-4f31-818f-5a47cbdfd677)
 
 ## Install, hotlink or copy & paste
 
