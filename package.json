@@ -1,6 +1,6 @@
 {
   "name": "tweenkie",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bytes-sized tweening function/library",
   "main": "dist/tween.mjs",
   "exports": {
@@ -8,35 +8,35 @@
       "node": "./dist/server/tween.cjs",
       "import": "./dist/tween.mjs",
       "require": "./dist/tween.cjs",
-      "types": "./types/tween.d.mts"
+      "types": "./types/tween.d.ts"
     },
     "./simple": {
       "node": "./dist/server/simple/tween.cjs",
       "import": "./dist/simple/tween.mjs",
       "require": "./dist/simple/tween.cjs",
-      "types": "./types/simple/tween.d.mts"
+      "types": "./types/tween.d.ts"
     },
     "./server": {
       "import": "./dist/server/tween.mjs",
       "require": "./dist/server/tween.cjs",
-      "types": "./types/tween.d.mts"
+      "types": "./types/tween.d.ts"
     },
     "./server/simple": {
       "import": "./dist/server/simple/tween.mjs",
       "require": "./dist/server/simple/tween.cjs",
-      "types": "./types/simple/tween.d.mts"
+      "types": "./types/tween.d.ts"
     },
     "./umd": {
       "default": "./dist/umd/tween.js",
-      "types": "./types/tween.d.mts"
+      "types": "./types/tween.d.ts"
     },
     "./umd/simple": {
       "default": "./dist/umd/simple/tween.js",
-      "types": "./types/simple/tween.d.mts"
+      "types": "./types/tween.d.ts"
     }
   },
   "type": "module",
-  "types": "types/types.d.mts",
+  "types": "types/types.d.ts",
   "files": [
     "dist",
     "types"
