@@ -174,6 +174,7 @@ Of course, it could be shorter, for example if easing function was linear. But t
 - Compatible with [easings.net](https://easings.net) functions (default translates as *easeOutCubic*), or any function that accepts and returns number from 0 to 1
 - Esm, cjs, umd and their min versions [included](https://www.npmjs.com/package/tweenkie?activeTab=code)
 - Types included
+- No dependencies
 - Name reminds of popular US candy 🤭
 
 ## Why?
